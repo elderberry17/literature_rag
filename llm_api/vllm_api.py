@@ -1,27 +1,28 @@
 import runpod
 import os
 
-runpod.api_key = ""
+# создаем в начале
+# runpod.api_key = ""
+# endpoint = runpod.Endpoint("")
 
-endpoint = runpod.Endpoint("")
+class RunPodClient:
+    def __ini__(self, api_key, endpoint, timeout=60):
+        runpod.api_key = api_key
+        self.endpoint = runpod.Endpoint(endpoint)
+        self.timeout = timeout
 
-print(endpoint)
-
-# run_request = endpoint.run_sync(
-#         {
-#             "input": {
-#                 "prompt": "Ты умеешь говорить по-русски?",
-#             }
-#         },
-#         timeout=60,
-#     )
-
-
-
-# можно вроде и через openai
-# через эту либу часто с 433 падает
-# print(run_request[0]['choices']['tokens'][0])
-
-# в таком виде возвращает ответ
-example = [{'choices': [{'tokens': [' Я умею!\nКонечно, я могу говорить на русском']}], 'usage': {'input': 11, 'output': 16}}]
-print(example[0]['choices'][0]['tokens'][0])
+    def get_qwen_answer(self, prompt):
+        run_request = self.endpoint.run_sync(
+                {
+                    "input": {
+                        "prompt": prompt,
+                    }
+                },
+                timeout=self.timeout,
+            )
+        
+        try:
+            return run_request[0]['choices'][0]['tokens'][0]
+        except:
+            return "Ответ не получен :("
+        
