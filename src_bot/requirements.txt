@@ -1,0 +1,6 @@
+python-telegram-bot==20.3
+runpod
+qdrant-client
+transformers
+scikit-learn
+langchain
